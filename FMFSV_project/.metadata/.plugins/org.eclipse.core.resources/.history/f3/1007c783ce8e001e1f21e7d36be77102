@@ -1,0 +1,24 @@
+/*Rates definitions*/
+rateMining=1.0 /* Mining rate */
+rateVerification=0.15 /* Verification rate*/
+K=20 /* Unfair miners */
+N=30 /* Fair miners */
+
+/* Unfair miner system definition */
+MinerUnfair=(mineUnfair, rateMining).MinerUnfair + (mineFair,T).MinerUnfair + (mineEnvironmentFair,T).MinerUnfair + (mineEnvironmentUnfair,T).MinerUnfair;
+EnvironmentUnfair=(mineEnvironmentUnfair, (N - 1)rateMining).EnvironmentUnfair + (mineFair,T).EnvironmentUnfair + (mineEnvironmentFair,T).EnvironmentUnfair + (mineUnfair,T).EnvironmentUnfair;
+
+/* Fair miner system definition */
+MinerFair=(mineFair, rateMining).VerifierFair + (mineEnvironmentFair,T).VerifierFair + (mineFair,T).VerifierUnfair + (mineEnvironmentUnfair,T).VerifierUnfair;
+VerifierFair=(verifyEnvironmentFair, rateVerification).MinerFair
+VerifierUnfair=(verifyEnvironmentUnfair, rateVerification).MinerFair
+EnvironmentFair=(mineEnvironmentFair, (K - 1)rateMining).VerifierEnvironment2 + (mineFair,T).VerifierEnvironment1 + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
+VerifierEnvironment1=(verifyFair,rateVerification).EnvironmentFair + (mineFair,T).VerifierEnvironment1 + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
+VerifierEnvironment2=(verifyEnvironmentFair, rateVerification).EnvironmentFair + (mineEnvironmentFair, rateMining).VerifierEnvironment2 + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
+VerifierEnvironmentUnfair=(verifyUnfair, rateVerification).EnvironmentFair + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
+
+/* System equation */
+SystemUnfair=MinerUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> EnvironmentUnfair;
+SystemFair=MinerFair <mineFair, mineEnvironmentFair, verifyFair, verifyEnvironmentFair, mineUnfair, mineEnvironmentUnfair> EnvironmentFair;
+
+LumpedModel=SystemUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> SystemUnfair;
