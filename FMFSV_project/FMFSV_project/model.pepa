@@ -1,19 +1,19 @@
 /*Rates definitions*/
 rateMining = 1.0; /* Mining rate */
 rateVerification = 0.15; /* Verification rate*/
-/*N = 90;  Fair miners */
-/*K = 10;  Unfair miners */
+numFairMiners = 90;  /* Fair miners */
+numUnfairMiners = 10;  /* Unfair miners */
 
 /* Unfair miner system definition */
-MinerUnfair=(mineUnfair, rateMining).MinerUnfair + (mineFair,T).MinerUnfair + (mineEnvironmentFair,T).MinerUnfair + (mineEnvironmentUnfair,T).MinerUnfair;
-EnvironmentUnfair=(mineEnvironmentUnfair, (90 - 1) * rateMining).EnvironmentUnfair + (mineFair,T).EnvironmentUnfair + (mineEnvironmentFair,T).EnvironmentUnfair + (mineUnfair,T).EnvironmentUnfair;
+MinerUnfair 				= (mineUnfair, rateMining).MinerUnfair + (mineFair, infty).MinerUnfair + (mineEnvironmentFair, infty).MinerUnfair + (mineEnvironmentUnfair, infty).MinerUnfair;
+EnvironmentUnfair 			= (mineEnvironmentUnfair, (numUnfairMiners - 1) * rateMining).EnvironmentUnfair + (mineFair, infty).EnvironmentUnfair + (mineEnvironmentFair, infty).EnvironmentUnfair + (mineUnfair, infty).EnvironmentUnfair;
 /* Fair miner system definition */
-MinerFair=(mineFair, rateMining).VerifierFair + (mineEnvironmentFair,T).VerifierFair + (mineFair,T).VerifierUnfair + (mineEnvironmentUnfair,T).VerifierUnfair;
-VerifierFair=(verifyEnvironmentFair, rateVerification).MinerFair;
-VerifierUnfair=(verifyEnvironmentUnfair, rateVerification).MinerFair;
-EnvironmentFair=(mineEnvironmentFair, (10 - 1) * rateMining).VerifierEnvironment2 + (mineFair,T).VerifierEnvironment1 + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
-VerifierEnvironment1=(verifyFair,rateVerification).EnvironmentFair + (mineFair,T).VerifierEnvironment1 + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
-VerifierEnvironment2=(verifyEnvironmentFair, rateVerification).EnvironmentFair + (mineEnvironmentFair, rateMining).VerifierEnvironment2 + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
-VerifierEnvironmentUnfair=(verifyUnfair, rateVerification).EnvironmentFair + (mineUnfair,T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair,T).VerifierEnvironmentUnfair;
+MinerFair 					= (mineFair, rateMining).VerifierFair + (mineEnvironmentFair, infty).VerifierFair + (mineUnfair, infty).VerifierUnfair + (mineEnvironmentUnfair, infty).VerifierUnfair;
+VerifierFair 				= (verifyEnvironmentFair, rateVerification).MinerFair + (mineEnvironmentFair, infty).VerifierFair + (mineUnfair, infty).VerifierUnfair + (mineEnvironmentUnfair, infty).VerifierUnfair;
+VerifierUnfair 				= (verifyUnfair, rateVerification).MinerFair + (mineUnfair, infty).VerifierUnfair + (mineEnvironmentUnfair, infty).VerifierUnfair;
+EnvironmentFair 			= (mineEnvironmentFair, (numFairMiners - 1) * rateMining).VerifierEnvironment2 + (mineFair, infty).VerifierEnvironment1 + (mineUnfair, infty).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, infty).VerifierEnvironmentUnfair;
+VerifierEnvironment1 		= (verifyFair,rateVerification).EnvironmentFair + (mineFair, infty).VerifierEnvironment1 + (mineUnfair, infty).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, infty).VerifierEnvironmentUnfair;
+VerifierEnvironment2 		= (verifyEnvironmentFair, rateVerification).EnvironmentFair + (mineEnvironmentFair, rateMining).VerifierEnvironment2 + (mineUnfair, infty).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, infty).VerifierEnvironmentUnfair;
+VerifierEnvironmentUnfair 	= (verifyUnfair, rateVerification).EnvironmentFair + (mineUnfair, infty).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, infty).VerifierEnvironmentUnfair;
 /* System equation */
-(MinerUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> EnvironmentUnfair) <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> (MinerFair <mineFair, mineEnvironmentFair, verifyFair, verifyEnvironmentFair, mineUnfair, mineEnvironmentUnfair> EnvironmentFair)
+(MinerUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> EnvironmentUnfair) <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> (MinerFair <mineFair, mineEnvironmentFair, verifyEnvironmentFair, mineUnfair, mineEnvironmentUnfair, verifyUnfair> EnvironmentFair)
