@@ -11,16 +11,19 @@ w2 = (1 - p);
 
 /* Unfair miner definition */
 MinerUnfair 				=	(mineUnfair, rateMining).MinerUnfair + (mineEnvironmentUnfair, T).MinerUnfair + 
-								(mineEnvironmentFair, T).MinerUnfair + (mineFair, T).MinerUnfair;
+								(mineEnvironmentFair, T).MinerUnfair + (mineFair, T).MinerUnfair +
+								(mineLazy, T).MinerUnfair;
 
 EnvironmentUnfair 			= 	(mineEnvironmentUnfair, (numUnfairMiners - 1) * rateMining).EnvironmentUnfair + (mineUnfair, T).EnvironmentUnfair + 
-								(mineFair, T).EnvironmentUnfair + (mineEnvironmentFair, T).EnvironmentUnfair;
+								(mineFair, T).EnvironmentUnfair + (mineEnvironmentFair, T).EnvironmentUnfair +
+								(mineLazy, T).EnvironmentUnfair;
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
 
 /* Fair miner definition */
 MinerFair 					= 	(mineFair, rateMining).VerifierFair + (mineEnvironmentFair, T).VerifierFair + 
-								(mineUnfair, T).VerifierUnfair + (mineEnvironmentUnfair, T).VerifierUnfair;
+								(mineUnfair, T).VerifierUnfair + (mineEnvironmentUnfair, T).VerifierUnfair + 
+								(mineLazy, T).MinerFair;
 								
 VerifierFair 				= 	(verifyEnvironmentFair, rateVerification).MinerFair + (mineEnvironmentFair, T).VerifierFair + 
 								(mineUnfair, T).VerifierUnfair + (mineEnvironmentUnfair, T).VerifierUnfair;
@@ -30,7 +33,8 @@ VerifierUnfair 				= 	(verifyUnfair, rateVerification).MinerFair +
 
 
 EnvironmentFair 			= 	(mineEnvironmentFair, (numFairMiners - 1) * rateMining).VerifierEnvironment2 + (mineFair, T).VerifierEnvironment1 + 
-								(mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair;
+								(mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair +
+								(mineLazy, T).EnvironmentFair;
 								
 VerifierEnvironment1 		= 	(verifyFair,rateVerification).EnvironmentFair + (mineFair, T).VerifierEnvironment1 + (mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair;
 VerifierEnvironment2		= 	(verifyEnvironmentFair, rateVerification).EnvironmentFair + (mineEnvironmentFair, rateMining).VerifierEnvironment2 + (mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair;
@@ -40,6 +44,13 @@ VerifierEnvironmentUnfair 	= 	(verifyUnfair, rateVerification).EnvironmentFair +
 
 /* Lazy verifier miner definition */
 /* Single */
+MinerLazy					= 	(mineLazy, w1 * rateMining).MinerLazy + (minerLazy, w2 * rateMining).MinerLazy +
+								(mineFair, 4 * T).MinerLazy + (mineFair, 6 * T).MinerLazy +
+								(mineEnvironmentFair, 4 * T).MinerLazy + (mineEnvironmentFair, 6 * T).MinerLazy +
+								(mineUnfair, 4 * T).MinerLazy + (mineUnfair, 6 * T).MinerLazy +
+								(mineEnvironmentUnfair, 4 * T).MinerLazy + (mineEnvironmentUnfair, 6 * T).MinerLazy;
+
+/*
 MinerLazy					= 	(mineLazy, w1 * rateMining).VerifierLazy + (mineLazy, w2 * rateMining).MinerLazy +
 								(mineEnvironmentLazy, 4 * T).VerifierLazy + (mineEnvironmentLazy, 6 * T).MinerLazy +
 								(mineFair, 4 * T).VerifierFairL + (mineFair, 6 * T).MinerLazy +
@@ -62,7 +73,7 @@ VerifierUnfairL				=	(verifyUnfair, rateVerification).MinerLazy +
 								(mineUnfair, 4 * T).VerifierUnfairL + (mineLazy, 6 * T).MinerLazy + 
 								(mineEnvironmentUnfair, T).VerifierUnfairL + (mineLazy, 6 * T).MinerLazy;
 
-/* Environment */
+Environment
 
 EnvironmentLazy				=	(mineEnvironmentLazy, (numLazyMiners - 1) * (w1 * rateMining)).VerifierEnvironment2L + (mineEnvironmentLazy, (numLazyMiners - 1) * (w2 * rateMining)).EnvironmentLazy +
 								(mineLazy, w1 * rateMining).VerifierEnvironment1L + (mineEnvironmentLazy, w2 * rateMining).EnvironmentLazy +
@@ -92,8 +103,13 @@ VerifierEnvironment2L		=	(verifyEnvironmentLazy, rateVerification).EnvironmentLa
 								(mineUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineUnfair, 6 * T).EnvironmentLazy +
 								(mineEnvironmentUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineEnvironmentUnfair, 6 * T).EnvironmentLazy;
 
+*/
 
 /* System equation */
-(MinerUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> EnvironmentUnfair) <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair> (MinerFair <mineFair, mineEnvironmentFair, verifyEnvironmentFair, mineUnfair, mineEnvironmentUnfair, verifyUnfair> EnvironmentFair) /* || (MinerLazy) */
+(MinerUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair, mineLazy> EnvironmentUnfair)
+<mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair, mineLazy> 
+(MinerFair <mineFair, mineEnvironmentFair, verifyEnvironmentFair, mineUnfair, mineEnvironmentUnfair, verifyUnfair, mineLazy> EnvironmentFair) 
+<mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair, mineLazy>
+MinerLazy
 
 
