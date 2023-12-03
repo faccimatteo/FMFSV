@@ -80,7 +80,7 @@ VFL		=	(vF, rV).MLV +
 								
 VUnL	=	(vUn, rV).MLV + 
 			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV + 
-			(mEnvU, T).VUnL + (mEnvU, 6 * T).MLV;
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).MLV;
 
 /* Environment */
 

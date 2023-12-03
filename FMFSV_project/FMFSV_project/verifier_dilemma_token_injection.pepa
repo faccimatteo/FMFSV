@@ -1,0 +1,60 @@
+/*Rates definitions*/
+rM = 0.5; 		/* Mining rate 						*/
+rV = 2.0; 		/* Verification rate				*/
+rFake = 0.1;	/* Block injection rate				*/
+nFM = 70;  		/* Fair miners 						*/
+nUM = 10;		/* Unfair miners 					*/
+
+/* Unfair miner definition */
+MUn   	=	(mUn, rM).MUn + (mEnvU, T).MUn + 
+			(mEnvF, T).MUn + (mF, T).MUn + (mFake, T).MUinv;
+
+MUinv	= 	(aTau, rM).MUinv + (mF, T).MUn + (mEnvF, T).MUn + (mFake, T).MUinv;
+
+EnvUn 	= 	(mEnvU, (nUM - 1) * rM).EnvUn + (mUn, T).EnvUn + 
+			(mF, T).EnvUn + (mEnvF, T).EnvUn + (mFake, T).EnvUinv;
+
+EnvUinv = 	(aTau, (nUM - 1) * rM).EnvUinv + (mF, T).EnvUn + (mEnvF, T).EnvUn + (mFake, T).EnvUinv;
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
+
+/* Fair miner definition */
+MF 		= 	(mF, rM).VF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn +
+			(mFake, T).VUn;
+								
+VF 		= 	(vEnvF, rV).MF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn +
+			(mFake, T).VUn;
+								
+VUn 	= 	(vUn, rV).MF + 
+			(mUn, T).VUn + (mEnvU, T).VUn +
+			(mFake, T).VUn;
+
+
+EnvF 	= 	(mEnvF, (nFM - 1) * rM).VEnv2 + (mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn + 
+			(mFake, T).VEnvUn;
+								
+VEnv1	= 	(vF,rV).EnvF + 
+			(mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn + 
+			(mFake, T).VEnvUn;
+								
+VEnv2	= 	(vEnvF, rV).EnvF + 
+			(mEnvF, rM).VEnv2 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn + 
+			(mFake, T).VEnvUn;
+								
+VEnvUn	= 	(vUn, rV).EnvF + 
+			(mUn, T).VEnvUn+ (mEnvU, T).VEnvUn + 
+			(mFake, T).VEnvUn;
+
+C		=	(mFake, rFake).C + (mUn, T).C + (mF, T).C + (mEnvU, T).C + (mEnvF, T).C;
+
+/* System equation */
+((MUn <mF, mEnvF, mUn, mEnvU, mFake> EnvUn)
+<mF, mEnvF, mUn, mEnvU, mFake> 
+(MF <mF, mEnvF, vEnvF, mUn, mEnvU, vUn, mFake> EnvF))
+<mF, mEnvF, mUn, mEnvU, mFake> 
+C

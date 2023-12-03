@@ -1,0 +1,45 @@
+/*Rates definitions*/
+rM 		= 0.5; 	/* Mining rate 						*/
+rV 		= 2.0; 	/* Verification rate				*/
+nFM 	= 70;  	/* Fair miners 						*/
+nUM 	= 10;	/* Unfair miners 					*/
+
+/* Unfair miner definition */
+MUn   	=	(mUn, rM).MUn + (mEnvU, T).MUn + 
+			(mEnvF, T).MUn + (mF, T).MUn;
+
+EnvUn 	= 	(mEnvU, (nUM - 1) * rM).EnvUn + (mUn, T).EnvUn + 
+			(mF, T).EnvUn + (mEnvF, T).EnvUn;
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
+
+/* Fair miner definition */
+MF 		= 	(mF, rM).VF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn;
+								
+VF 		= 	(vEnvF, rV).MF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn;
+								
+VUn 	= 	(vUn, rV).MF + 
+			(mUn, T).VUn + (mEnvU, T).VUn;
+
+
+EnvF 	= 	(mEnvF, (nFM - 1) * rM).VEnv2 + (mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn;
+								
+VEnv1	= 	(vF,rV).EnvF + 
+			(mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn;
+								
+VEnv2	= 	(vEnvF, rV).EnvF + 
+			(mEnvF, rM).VEnv2 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn;
+								
+VEnvUn	= 	(vUn, rV).EnvF + 
+			(mUn, T).VEnvUn+ (mEnvU, T).VEnvUn;
+
+
+/* System equation */
+(MUn <mF, mEnvF, mUn, mEnvU> EnvUn)
+<mF, mEnvF, mUn, mEnvU> 
+(MF <mF, mEnvF, vEnvF, mUn, mEnvU, vUn> EnvF)
