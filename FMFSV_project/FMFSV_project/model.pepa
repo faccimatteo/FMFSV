@@ -1,122 +1,122 @@
 /*Rates definitions*/
-rateMining = 0.1; 		/* Mining rate 						*/
-rateVerification = 2.0; /* Verification rate				*/
-numFairMiners = 70;  	/* Fair miners 						*/
-numUnfairMiners = 10;	/* Unfair miners 					*/
-numLazyMiners = 20; 	/* Lazy verifier miners 			*/
-p = 0.4; 				/* Lazy verifier verify probability */
+rM = 0.1; 	/* Mining rate 						*/
+rV = 2.0; 	/* Verification rate				*/
+nFM = 70;  	/* Fair miners 						*/
+nUM = 10;	/* Unfair miners 					*/
+nLM = 20; 	/* Lazy verifier miners 			*/
+p = 0.4; 	/* Lazy verifier verify probability */
 w1 = p;
 w2 = (1 - p);
 
 
 /* Unfair miner definition */
-MinerUnfair 				=	(mineUnfair, rateMining).MinerUnfair + (mineEnvironmentUnfair, T).MinerUnfair + 
-								(mineEnvironmentFair, T).MinerUnfair + (mineFair, T).MinerUnfair +
-								(mineLazy, T).MinerUnfair + (mineEnvironmentLazy, T).MinerUnfair;
+MUn   	=	(mUn, rM).MUn + (mEnvU, T).MUn + 
+			(mEnvF, T).MUn + (mF, T).MUn +
+			(mLV, T).MUn + (mEnvL, T).MUn;
 
-EnvironmentUnfair 			= 	(mineEnvironmentUnfair, (numUnfairMiners - 1) * rateMining).EnvironmentUnfair + (mineUnfair, T).EnvironmentUnfair + 
-								(mineFair, T).EnvironmentUnfair + (mineEnvironmentFair, T).EnvironmentUnfair +
-								(mineLazy, T).EnvironmentUnfair + (mineEnvironmentLazy, T).EnvironmentUnfair;
+EnvUn 	= 	(mEnvU, (nUM - 1) * rM).EnvUn + (mUn, T).EnvUn + 
+			(mF, T).EnvUn + (mEnvF, T).EnvUn +
+			(mLV, T).EnvUn + (mEnvL, T).EnvUn;
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
 
 /* Fair miner definition */
-MinerFair 					= 	(mineFair, rateMining).VerifierFair + (mineEnvironmentFair, T).VerifierFair + 
-								(mineUnfair, T).VerifierUnfair + (mineEnvironmentUnfair, T).VerifierUnfair + 
-								(mineLazy, T).VerifierLazy + (mineEnvironmentLazy, T).VerifierLazy;
+MF 		= 	(mF, rM).VF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn + 
+			(mLV, T).VLV + (mEnvL, T).VLV;
 								
-VerifierFair 				= 	(verifyEnvironmentFair, rateVerification).MinerFair + (mineEnvironmentFair, T).VerifierFair + 
-								(mineUnfair, T).VerifierUnfair + (mineEnvironmentUnfair, T).VerifierUnfair +
-								(mineLazy, T).VerifierLazy + (mineEnvironmentLazy, T).VerifierLazy;
+VF 		= 	(vEnvF, rV).MF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn +
+			(mLV, T).VLV + (mEnvL, T).VLV;
 								
-VerifierUnfair 				= 	(verifyUnfair, rateVerification).MinerFair + 
-								(mineUnfair, T).VerifierUnfair + (mineEnvironmentUnfair, T).VerifierUnfair;
+VUn 	= 	(vUn, rV).MF + 
+			(mUn, T).VUn + (mEnvU, T).VUn;
 
-VerifierLazy 				= 	(verifyLazy, rateVerification).MinerFair + 
-								(mineLazy, T).VerifierLazy + (mineEnvironmentLazy, T).VerifierLazy;
+VLV 	= 	(vLV, rV).MF + 
+			(mLV, T).VLV + (mEnvL, T).VLV;
 
 
-EnvironmentFair 			= 	(mineEnvironmentFair, (numFairMiners - 1) * rateMining).VerifierEnvironment2 + (mineFair, T).VerifierEnvironment1 + 
-								(mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair +
-								(mineLazy, T).VerifierEnvironmentLazy + (mineEnvironmentLazy, T).VerifierEnvironmentLazy;
+EnvF 	= 	(mEnvF, (nFM - 1) * rM).VEnv2 + (mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn +
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV;
 								
-VerifierEnvironment1 		= 	(verifyFair,rateVerification).EnvironmentFair + 
-								(mineFair, T).VerifierEnvironment1 + 
-								(mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair + 
-								(mineLazy, T).VerifierEnvironmentLazy + (mineEnvironmentLazy, T).VerifierEnvironmentLazy;
+VEnv1	= 	(vF,rV).EnvF + 
+			(mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn +	
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV;
 								
-VerifierEnvironment2		= 	(verifyEnvironmentFair, rateVerification).EnvironmentFair + 
-								(mineEnvironmentFair, rateMining).VerifierEnvironment2 + 
-								(mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair +
-								(mineLazy, T).VerifierEnvironmentLazy + (mineEnvironmentLazy, T).VerifierEnvironmentLazy;
+VEnv2	= 	(vEnvF, rV).EnvF + 
+			(mEnvF, rM).VEnv2 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn +
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV;
 								
-VerifierEnvironmentUnfair 	= 	(verifyUnfair, rateVerification).EnvironmentFair + 
-								(mineUnfair, T).VerifierEnvironmentUnfair + (mineEnvironmentUnfair, T).VerifierEnvironmentUnfair;
+VEnvUn	= 	(vUn, rV).EnvF + 
+			(mUn, T).VEnvUn+ (mEnvU, T).VEnvUn;
 								
-VerifierEnvironmentLazy 	= 	(verifyLazy, rateVerification).EnvironmentFair + 
-								(mineLazy, T).VerifierEnvironmentLazy + (mineEnvironmentLazy, T).VerifierEnvironmentLazy;
+VEnvLV	= 	(vLV, rV).EnvF + 
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV;
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
 
 /* Lazy verifier miner definition */
 /* Single */
-MinerLazy					= 	(mineLazy, w1 * rateMining).VerifierLazyL + (minerLazy, w2 * rateMining).MinerLazy +
-								(mineEnvironmentLazy, w1 * rateMining).VerifierLazyL + (mineEnvironmentLazy, w2 * rateMining).MinerLazy +
-								(mineFair, 4 * T).MinerLazy + (mineFair, 6 * T).MinerLazy +
-								(mineEnvironmentFair, 4 * T).MinerLazy + (mineEnvironmentFair, 6 * T).MinerLazy +
-								(mineUnfair, 4 * T).MinerLazy + (mineUnfair, 6 * T).MinerLazy +
-								(mineEnvironmentUnfair, 4 * T).MinerLazy + (mineEnvironmentUnfair, 6 * T).MinerLazy;
+MLV		= 	(mLV, w1 * rM).VLVL + (minerLazy, w2 * rM).MLV +
+			(mEnvL, w1 * rM).VLVL + (mEnvL, w2 * rM).MLV +
+			(mF, 4 * T).MLV + (mF, 6 * T).MLV +
+			(mEnvF, 4 * T).MLV + (mEnvF, 6 * T).MLV +
+			(mUn, 4 * T).MLV + (mUn, 6 * T).MLV +
+			(mEnvU, 4 * T).MLV + (mEnvU, 6 * T).MLV;
 
-VerifierLazyL				= 	(verifyEnvironmentLazy, rateVerification).MinerLazy +
-								/* (mineEnvironmentLazy, T).VerifierLazyL + (mineEnvironmentLazy, T).MinerLazy +*/
-								(mineUnfair, 4 * T).VerifierUnfairL + (mineUnfair, 6 * T).MinerLazy +
-								(mineEnvironmentUnfair, 4 * T).VerifierUnfairL + (mineEnvironmentUnfair, 6 * T).MinerLazy +
-								(mineFair, 4 * T).VerifierFairL + (mineFair, 6 * T).MinerLazy +
-								(mineEnvironmentFair, 4 * T).VerifierFairL + (mineEnvironmentFair, 6 * T).MinerLazy;
+VLVL	= 	(vEnvLV, rV).MLV +
+		/* (mEnvL, T).VLVL + (mEnvL, T).MLV+*/
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV +
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).MLV +
+			(mF, 4 * T).VFL + (mF, 6 * T).MLV +
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).MLV;
 								
-VerifierFairL				=	(verifyFair, rateVerification).MinerLazy + 
-								(mineFair, 4 * T).VerifierFairL + (mineFair, 6 * T).MinerLazy + 
-								(mineEnvironmentFair, 4 * T).VerifierFairL + (mineEnvironmentFair, 6 * T).MinerLazy;
+VFL		=	(vF, rV).MLV + 
+			(mF, 4 * T).VFL + (mF, 6 * T).MLV + 
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).MLV;
 								
-VerifierUnfairL				=	(verifyUnfair, rateVerification).MinerLazy + 
-								(mineUnfair, 4 * T).VerifierUnfairL + (mineUnfair, 6 * T).MinerLazy + 
-								(mineEnvironmentUnfair, T).VerifierUnfairL + (mineEnvironmentUnfair, 6 * T).MinerLazy;
+VUnL	=	(vUn, rV).MLV + 
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV + 
+			(mEnvU, T).VUnL + (mEnvU, 6 * T).MLV;
 
 /* Environment */
 
-EnvironmentLazy				=	(mineEnvironmentLazy, (numLazyMiners - 1) * (w1 * rateMining)).VerifierEnvironment2L + (mineEnvironmentLazy, (numLazyMiners - 1) * (w2 * rateMining)).EnvironmentLazy +
-								(mineLazy, w1 * rateMining).VerifierEnvironment1L + (mineEnvironmentLazy, w2 * rateMining).EnvironmentLazy +
-								(mineFair, 4 * T).VerifierEnvironmentFairL + (mineFair, 6 * T).MinerLazy +
-								(mineEnvironmentFair, 4 * T).VerifierEnvironmentFairL + (mineEnvironmentFair, 6 * T).EnvironmentLazy +
-								(mineUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineUnfair, 6 * T).EnvironmentLazy +
-								(mineEnvironmentUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineEnvironmentUnfair, 6 * T).EnvironmentLazy;
+EnvLV	=	(mEnvL, (nLM - 1) * (w1 * rM)).VEnv2L + (mEnvL, (nLM - 1) * (w2 * rM)).EnvLV +
+			(mLV, w1 * rM).VEnv1L + (mEnvL, w2 * rM).EnvLV +
+			(mF, 4 * T).VEnvFL + (mF, 6 * T).MLV+
+			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
+			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VEnvUnL + (mEnvU, 6 * T).EnvLV;
 								
-VerifierEnvironmentUnfairL	= 	(verifyUnfair, rateVerification).EnvironmentLazy + 
-								(mineUnfair, 4 * T).VerifierUnfairL + (mineUnfair, 6 * T).EnvironmentLazy +
-								(mineEnvironmentUnfair, 4 * T).VerifierUnfairL + (mineEnvironmentUnfair, 6 * T).EnvironmentLazy;
+VEnvUnL	= 	(vUn, rV).EnvLV + 
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).EnvLV;
 
-VerifierEnvironmentFairL	=	(verifyFair, rateVerification).EnvironmentLazy + 
-								(mineFair, 4 * T).VerifierFairL + (mineFair, 6 * T).EnvironmentLazy + 
-								(mineEnvironmentFair, 4 * T).VerifierFairL + (mineEnvironmentFair, 6 * T).EnvironmentLazy;
+VEnvFL	=	(vF, rV).EnvLV + 
+			(mF, 4 * T).VFL + (mF, 6 * T).EnvLV + 
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).EnvLV;
 								
-VerifierEnvironment1L		=	(verifyLazy, rateVerification).EnvironmentLazy + 
-								(mineFair, 4 * T).VerifierEnvironment1L + (mineFair, 6 * T).EnvironmentLazy +
-								(mineEnvironmentFair, 4 * T).VerifierEnvironmentFairL + (mineEnvironmentFair, 6 * T).EnvironmentLazy +
-								(mineUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineUnfair, 6 * T).EnvironmentLazy +
-								(mineEnvironmentUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineEnvironmentUnfair, 6 * T).EnvironmentLazy;
+VEnv1L	=	(vLV, rV).EnvLV + 
+			(mF, 4 * T).VEnv1L + (mF, 6 * T).EnvLV +
+			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
+			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VEnvUnL + (mEnvU, 6 * T).EnvLV;
 								
-VerifierEnvironment2L		=	(verifyEnvironmentLazy, rateVerification).EnvironmentLazy +
-								(mineEnvironmentLazy, 4 * T).VerifierEnvironment2L + (mineEnvironmentLazy, 6 * T).EnvironmentLazy +
-								(mineFair, 4 * T).VerifierEnvironmentFairL + (mineFair, 6 * T).EnvironmentLazy +
-								(mineEnvironmentFair, 4 * T).VerifierEnvironmentFairL + (mineEnvironmentFair, 6 * T).EnvironmentLazy +
-								(mineUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineUnfair, 6 * T).EnvironmentLazy +
-								(mineEnvironmentUnfair, 4 * T).VerifierEnvironmentUnfairL + (mineEnvironmentUnfair, 6 * T).EnvironmentLazy;
+VEnv2L	=	(vEnvLV, rV).EnvLV +
+			(mEnvL, 4 * T).VEnv2L + (mEnvL, 6 * T).EnvLV +
+			(mF, 4 * T).VEnvFL + (mF, 6 * T).EnvLV +
+			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
+			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VEnvUnL + (mEnvU, 6 * T).EnvLV;
 
 /* System equation */
-(MinerUnfair <mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair, mineLazy, mineEnvironmentLazy> EnvironmentUnfair)
-<mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair, mineLazy, mineEnvironmentLazy> 
-(MinerFair <mineFair, mineEnvironmentFair, verifyEnvironmentFair, mineUnfair, mineEnvironmentUnfair, verifyUnfair, mineLazy, mineEnvironmentLazy, verifyLazy> EnvironmentFair) 
-<mineFair, mineEnvironmentFair, mineUnfair, mineEnvironmentUnfair, mineLazy, mineEnvironmentLazy>
-(MinerLazy <mineLazy, mineEnvironmentLazy, verifyEnvironmentLazy, mineFair, mineEnvironmentFair, verifyFair, mineUnfair, mineEnvironmentUnfair, verifyUnfair> EnvironmentLazy)
+(MUn <mF, mEnvF, mUn, mEnvU, mLV, mEnvL> EnvUn)
+<mF, mEnvF, mUn, mEnvU, mLV, mEnvL> 
+(MF <mF, mEnvF, vEnvF, mUn, mEnvU, vUn, mLV, mEnvL, vLV> EnvF) 
+<mF, mEnvF, mUn, mEnvU, mLV, mEnvL>
+(MLV<mLV, mEnvL, vEnvLV, mF, mEnvF, vF, mUn, mEnvU, vUn> EnvLV)
 
 
