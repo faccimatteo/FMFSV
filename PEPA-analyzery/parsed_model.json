@@ -1,0 +1,736 @@
+{
+    "components": {
+        "C": [
+            {
+                "rate": "rFake",
+                "transition": "C -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "C -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "C -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "C -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "C -> mEnvF"
+            },
+            {
+                "rate": "T",
+                "transition": "C -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "C -> mEnvL"
+            }
+        ],
+        "EnvF": [
+            {
+                "rate": "rV",
+                "transition": "VEnv1 -> vF"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnv2 -> vEnvF"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnvUn -> vUn"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnvLV -> vLV"
+            }
+        ],
+        "EnvLV": [
+            {
+                "rate": "(nLM-1)*(w2*rM)",
+                "transition": "EnvLV -> mEnvL"
+            },
+            {
+                "rate": "w2*rM",
+                "transition": "EnvLV -> mEnvL"
+            },
+            {
+                "rate": "6*T",
+                "transition": "EnvLV -> mEnvF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "EnvLV -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "EnvLV -> mEnvU"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnvUnL -> vUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnvUnL -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnvUnL -> mEnvU"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnvFL -> vF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnvFL -> mF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnvFL -> mEnvF"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnv1L -> vLV"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv1L -> mF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv1L -> mEnvF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv1L -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv1L -> mEnvU"
+            },
+            {
+                "rate": "rV",
+                "transition": "VEnv2L -> vEnvLV"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv2L -> mEnvL"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv2L -> mF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv2L -> mEnvF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv2L -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VEnv2L -> mEnvU"
+            }
+        ],
+        "EnvUinv": [
+            {
+                "rate": "T",
+                "transition": "EnvUn -> mFake"
+            },
+            {
+                "rate": "(nUM-1)*rM",
+                "transition": "EnvUinv -> aTau"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUinv -> mFake"
+            }
+        ],
+        "EnvUn": [
+            {
+                "rate": "(nUM-1)*rM",
+                "transition": "EnvUn -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUn -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUn -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUn -> mEnvF"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUn -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUn -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUinv -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvUinv -> mEnvF"
+            }
+        ],
+        "MF": [
+            {
+                "rate": "rV",
+                "transition": "VF -> vEnvF"
+            },
+            {
+                "rate": "rV",
+                "transition": "VUn -> vUn"
+            },
+            {
+                "rate": "rV",
+                "transition": "VLV -> vLV"
+            }
+        ],
+        "MLV": [
+            {
+                "rate": "w2*rM",
+                "transition": "MLV -> mLV"
+            },
+            {
+                "rate": "w2*rM",
+                "transition": "MLV -> mEnvL"
+            },
+            {
+                "rate": "4*T",
+                "transition": "MLV -> mF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "MLV -> mF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "MLV -> mEnvF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "MLV -> mEnvF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "MLV -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "MLV -> mUn"
+            },
+            {
+                "rate": "4*T",
+                "transition": "MLV -> mEnvU"
+            },
+            {
+                "rate": "6*T",
+                "transition": "MLV -> mEnvU"
+            },
+            {
+                "rate": "rV",
+                "transition": "VLVL -> vEnvLV"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VLVL -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VLVL -> mEnvU"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VLVL -> mF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VLVL -> mEnvF"
+            },
+            {
+                "rate": "rV",
+                "transition": "VFL -> vF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VFL -> mF"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VFL -> mEnvF"
+            },
+            {
+                "rate": "rV",
+                "transition": "VUnL -> vUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VUnL -> mUn"
+            },
+            {
+                "rate": "6*T",
+                "transition": "VUnL -> mEnvU"
+            },
+            {
+                "rate": "6*T",
+                "transition": "EnvLV -> mF"
+            }
+        ],
+        "MUinv": [
+            {
+                "rate": "T",
+                "transition": "MUn -> mFake"
+            },
+            {
+                "rate": "rM",
+                "transition": "MUinv -> aTau"
+            },
+            {
+                "rate": "T",
+                "transition": "MUinv -> mFake"
+            }
+        ],
+        "MUn": [
+            {
+                "rate": "rM",
+                "transition": "MUn -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "MUn -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "MUn -> mEnvF"
+            },
+            {
+                "rate": "T",
+                "transition": "MUn -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "MUn -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "MUn -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "MUinv -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "MUinv -> mEnvF"
+            }
+        ],
+        "VEnv1": [
+            {
+                "rate": "T",
+                "transition": "EnvF -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1 -> mF"
+            }
+        ],
+        "VEnv1L": [
+            {
+                "rate": "w1*rM",
+                "transition": "EnvLV -> mLV"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv1L -> mF"
+            }
+        ],
+        "VEnv2": [
+            {
+                "rate": "(nFM-1)*rM",
+                "transition": "EnvF -> mEnvF"
+            },
+            {
+                "rate": "rM",
+                "transition": "VEnv2 -> mEnvF"
+            }
+        ],
+        "VEnv2L": [
+            {
+                "rate": "(nLM-1)*(w1*rM)",
+                "transition": "EnvLV -> mEnvL"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv2L -> mEnvL"
+            }
+        ],
+        "VEnvFL": [
+            {
+                "rate": "4*T",
+                "transition": "EnvLV -> mF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "EnvLV -> mEnvF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv1L -> mEnvF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv2L -> mF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv2L -> mEnvF"
+            }
+        ],
+        "VEnvLV": [
+            {
+                "rate": "T",
+                "transition": "EnvF -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvF -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1 -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1 -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv2 -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv2 -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvLV -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvLV -> mEnvL"
+            }
+        ],
+        "VEnvUn": [
+            {
+                "rate": "T",
+                "transition": "EnvF -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvF -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvF -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1 -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1 -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1 -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv2 -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv2 -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv2 -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvUn -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvUn -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvUn -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvLV -> mFake"
+            }
+        ],
+        "VEnvUnL": [
+            {
+                "rate": "4*T",
+                "transition": "EnvLV -> mUn"
+            },
+            {
+                "rate": "4*T",
+                "transition": "EnvLV -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "EnvLV -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvUnL -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnvFL -> mFake"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv1L -> mUn"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv1L -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv1L -> mFake"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv2L -> mUn"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnv2L -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VEnv2L -> mFake"
+            }
+        ],
+        "VF": [
+            {
+                "rate": "rM",
+                "transition": "MF -> mF"
+            },
+            {
+                "rate": "T",
+                "transition": "MF -> mEnvF"
+            },
+            {
+                "rate": "T",
+                "transition": "VF -> mEnvF"
+            }
+        ],
+        "VFL": [
+            {
+                "rate": "4*T",
+                "transition": "VLVL -> mF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VLVL -> mEnvF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VFL -> mF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VFL -> mEnvF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnvFL -> mF"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnvFL -> mEnvF"
+            }
+        ],
+        "VLV": [
+            {
+                "rate": "T",
+                "transition": "MF -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "MF -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "VF -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "VF -> mEnvL"
+            },
+            {
+                "rate": "T",
+                "transition": "VLV -> mLV"
+            },
+            {
+                "rate": "T",
+                "transition": "VLV -> mEnvL"
+            }
+        ],
+        "VLVL": [
+            {
+                "rate": "w1*rM",
+                "transition": "MLV -> mLV"
+            },
+            {
+                "rate": "w1*rM",
+                "transition": "MLV -> mEnvL"
+            }
+        ],
+        "VUn": [
+            {
+                "rate": "T",
+                "transition": "MF -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "MF -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "MF -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VF -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "VF -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VF -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VUn -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "VUn -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VUn -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VLV -> mFake"
+            }
+        ],
+        "VUnL": [
+            {
+                "rate": "T",
+                "transition": "MLV -> mFake"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VLVL -> mUn"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VLVL -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VLVL -> mFake"
+            },
+            {
+                "rate": "T",
+                "transition": "VFL -> mFake"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VUnL -> mUn"
+            },
+            {
+                "rate": "T",
+                "transition": "VUnL -> mEnvU"
+            },
+            {
+                "rate": "T",
+                "transition": "VUnL -> mFake"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnvUnL -> mUn"
+            },
+            {
+                "rate": "4*T",
+                "transition": "VEnvUnL -> mEnvU"
+            }
+        ]
+    },
+    "rates": [
+        {
+            "rate": "rM",
+            "value": "0.5"
+        },
+        {
+            "rate": "rV",
+            "value": "2.0"
+        },
+        {
+            "rate": "rFake",
+            "value": "0.1"
+        },
+        {
+            "rate": "nFM",
+            "value": "70"
+        },
+        {
+            "rate": "nUM",
+            "value": "10"
+        },
+        {
+            "rate": "nLM",
+            "value": "20"
+        },
+        {
+            "rate": "p",
+            "value": "0.4"
+        },
+        {
+            "rate": "w1",
+            "value": "p"
+        },
+        {
+            "rate": "w2",
+            "value": "(1-p)"
+        }
+    ]
+}
