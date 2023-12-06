@@ -78,10 +78,10 @@ VEnvLV	= 	(vLV, rV).EnvF +
 /* Single */
 MLV		= 	(mLV, w1 * rM).VLVL + (mLV, w2 * rM).MLV +
 			(mEnvL, w1 * rM).VLVL + (mEnvL, w2 * rM).MLV +
-			(mF, 4 * T).MLV + (mF, 6 * T).MLV +
-			(mEnvF, 4 * T).MLV + (mEnvF, 6 * T).MLV +
-			(mUn, 4 * T).MLV + (mUn, 6 * T).MLV +
-			(mEnvU, 4 * T).MLV + (mEnvU, 6 * T).MLV + 
+			(mF, 4 * T).VFL + (mF, 6 * T).MLV +
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).MLV +
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV +
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).MLV + 
 			(mFake, T).VUnL;
 
 VLVL	= 	(vEnvLV, rV).MLV +
