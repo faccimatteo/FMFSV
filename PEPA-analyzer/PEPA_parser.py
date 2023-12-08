@@ -2,6 +2,12 @@ import re
 import json
 from typing import List
 from itertools import product
+import graphviz
+import logging
+from states import model_states
+
+logger = logging.getLogger("model_parser")
+logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
 def remove_comments(input_string: str):
     # Remove /* */ comments
@@ -23,7 +29,7 @@ def remove_whitespaces(input_string: str):
 
 def remove_unneeded_characters(input_string: str) -> str:
     """
-    Remove unnecessaris characters used to parse the PEPA model as:
+    Remove unnecessaries characters used to parse the PEPA model as:
     
     - comments;
     - tabs;
@@ -93,7 +99,8 @@ def parse_components(component: str, component_value: str, components: dict) -> 
 
 def compute_outgoing_states(current_state: List[str], activity: str, model: dict):
     """ 
-    Compute every outgoing states starting from a `current_sate` and given an `activity`.
+    Compute every outgoing states and their relative rates 
+    starting from a `current_state` and given an `activity`.
     Transitions are followed by using `model` as reference.
     
     Args:
@@ -102,23 +109,29 @@ def compute_outgoing_states(current_state: List[str], activity: str, model: dict
         model (dict): _description_
     """
     component_next_state = []
+    next_state_rates = []
     is_set_present = False
     for component in current_state:
-        if len(model["components"][component][activity]) > 1:
-            is_set_present = True
-            multiple_states_outcomes = set([outgoing_component_state['next_state'] for outgoing_component_state in model["components"][component][activity]])
-            component_next_state.append(multiple_states_outcomes) 
-        else: 
-            component_next_state.append(model["components"][component][activity][0]["next_state"])
-        
+        if activity in model["components"][component]:
+            # If activity produces two or more outgoing states 
+            if len(model["components"][component][activity]) > 1:
+                is_set_present = True
+                multiple_state_outcomes = set([outgoing_component_state['next_state'] for outgoing_component_state in model["components"][component][activity]])
+                component_next_state.append(multiple_state_outcomes) 
+            else: 
+                # Transition with exactly one outgoing state
+                component_next_state.append(model["components"][component][activity][0]["next_state"])
+        else:
+            # If no transition exists for this action
+            component_next_state.append(component)
+            
     if is_set_present: 
         # Convert to set if not already a set
         sets = [elem if isinstance(elem, set) else {elem} for elem in component_next_state]
         # Calculate combinations
         component_next_state = list(map(lambda x: list(x), list(product(*sets))))
         
-    print(activity)
-    print(component_next_state)
+    return (component_next_state)
             
 def parse_model(filePath: str) -> dict:
     
@@ -136,7 +149,7 @@ def parse_model(filePath: str) -> dict:
     line_to_parse = file.readlines()
     file.close()
     if len(line_to_parse) == 0:
-        print(f"No rows in {filePath} to parse.")
+        logger.error(f"No rows in {filePath} to parse.")
         exit(0)
         
     for line in line_to_parse:
@@ -161,17 +174,47 @@ def parse_model(filePath: str) -> dict:
             # Parsing components 
             parse_components(component=entity, component_value=value, components=model["components"]) 
             
-    return model 
-    
-    
+    return model
 
-model = parse_model("/Users/matteo/Documents/Unive/FMFSV/PEPA-analyzery/model.pepa")
+def draw_derivation_graph(model: str, activities: List[str]):
+    graph = graphviz.Digraph('Derivation graph', format='svg')
+    graph.attr(rankdir='TB') 
+    graph.attr(nodesep='2.0')
+    graph.attr(ranksep='2.0')
 
-current_state = ["MUn", "EnvUn", "MF", "EnvF", "MLV", "EnvLV", "C"]
+    # Looping over model different model states
+    for current_state in model_states:
+        
+        # Turning current PEPA state in a representable format
+        current_state_graph = "(" + ", ".join(current_state) + ")"
+        # Creating node for starting state
+        graph.node(current_state_graph)
+        
+        logger.debug("[+] -------------------------------------------------------------------------------------------------------------------------------------- [+]")
+        logger.debug(f"[MODEL PARSER] - Computing outgoing states for state {current_state_graph}")
+        
+        # Looping over different activities
+        for activity in activities:
+            logger.debug(f"[MODEL PARSER] --> Analyzing transition {activity}")
+            outgoing_states = compute_outgoing_states(current_state=current_state, activity=activity, model=model)
+            
+            # Transition for current_state produces multiple outgoing states
+            if len(outgoing_states) > 1 and isinstance(outgoing_states[0], List):
+                # Looping on outgoing state given: current state -> activity
+                for outgoing_state in outgoing_states:
+                    outgoing_state_string = "(" + ", ".join(outgoing_state) + ")"
+                    graph.node(outgoing_state_string)
+                    graph.edge(current_state_graph, outgoing_state_string, activity)
+            # Transition produces exactly one state
+            elif isinstance(outgoing_states, List): 
+                graph.node(outgoing_state_string)
+                graph.edge(current_state_graph, outgoing_state_string, activity)
+            else:
+                logger.error(f"[MODEL PARSER] - Unexpected outgoing state from the model: {outgoing_state_string}")
+    graph.render('derivation_graph', cleanup=True, format='svg')
+
+
+model = parse_model("/Users/matteo/Documents/Unive/FMFSV/PEPA-analyzer/model.pepa")
 activities = ["mUn", "mEnvU", "mEnvF", "mF", "mLV", "mEnvL", "mFake"]
 
-print(current_state)
-
-for activity in activities:
-    compute_outgoing_states(current_state=current_state, activity=activity, model=model)
-# print(json.dumps(model, indent=4))
+draw_derivation_graph(model=model, activities=activities)
