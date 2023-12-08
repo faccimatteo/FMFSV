@@ -1,4 +1,5 @@
 import re
+import os 
 import json
 from typing import List
 from itertools import product
@@ -87,7 +88,7 @@ def parse_components(component: str, component_value: str, components: dict) -> 
         component_value (str): list of all component activities
         components (dict): components dictionary to populate by parsing component's activities
     Returns:
-        _type_: _description_
+        Parsed PEPA model dictionary, with `rate` and `components` filed.
     """
     
     components_actions = component_value.split('+')
@@ -105,7 +106,7 @@ def compute_outgoing_states(current_state: List[str], activity: str, model: dict
     
     Args:
         current_state (List[str]): list of current PEPA components of the system at a given time T.
-        activity (str): 
+        activity (str): PEPA component's activity for the model.
         model (dict): _description_
     """
     component_next_state = []
@@ -132,24 +133,43 @@ def compute_outgoing_states(current_state: List[str], activity: str, model: dict
         component_next_state = list(map(lambda x: list(x), list(product(*sets))))
         
     return (component_next_state)
-            
+
+def compute_activities(model: dict) -> List[str]:
+    
+    """
+    Given a model extract all its related activities.
+    
+    Args:
+        model (dict): parsed PEPA model
+    """
+    activities = set()
+    
+    # Adding activities from the component
+    for component in model["components"]:
+        for activity in dict(model["components"][component]).keys():
+            activities.add(activity)
+    
+    # Set to list    
+    return [activity for activity in activities]
+
 def parse_model(filePath: str) -> dict:
     
     try:
         file = open(file=filePath)
     except Exception:
-        print(f"File {filePath} may not exists. Make file exists.")
+        print(f"[MODEL PARSER] - File {filePath} may not exists. Make sure file is present.")
         exit(1)
     
     rows = []
     row = ""
     
     model = { 'rates': [], 'components': {}}
-    
+   
+    logger.debug(f"[MODEL PARSER] - Parsing model for PEPA model {filePath} ... ") 
     line_to_parse = file.readlines()
     file.close()
     if len(line_to_parse) == 0:
-        logger.error(f"No rows in {filePath} to parse.")
+        logger.error(f"[MODEL PARSER] - No rows in {filePath} to parse.")
         exit(0)
         
     for line in line_to_parse:
@@ -173,7 +193,13 @@ def parse_model(filePath: str) -> dict:
         else: 
             # Parsing components 
             parse_components(component=entity, component_value=value, components=model["components"]) 
-            
+    
+    # Writing model to file for debug purposes
+    parsed_model = open(file='parsed_model.json', mode='w')
+    parsed_model.write(str(model))
+    parsed_model.close()
+    logger.debug(f"[MODEL PARSER] - Parsing model operation completed. Complete file can be found in \"{os.getcwd()}parsed_mode.json\"") 
+    
     return model
 
 def draw_derivation_graph(model: str, activities: List[str]):
@@ -214,7 +240,3 @@ def draw_derivation_graph(model: str, activities: List[str]):
     graph.render('derivation_graph', cleanup=True, format='svg')
 
 
-model = parse_model("/Users/matteo/Documents/Unive/FMFSV/PEPA-analyzer/model.pepa")
-activities = ["mUn", "mEnvU", "mEnvF", "mF", "mLV", "mEnvL", "mFake"]
-
-draw_derivation_graph(model=model, activities=activities)
