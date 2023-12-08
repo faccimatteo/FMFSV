@@ -525,7 +525,7 @@
             ],
             "mF": [
                 {
-                    "next_state": "MLV",
+                    "next_state": "VFL",
                     "rate": "4*T"
                 },
                 {
@@ -535,7 +535,7 @@
             ],
             "mEnvF": [
                 {
-                    "next_state": "MLV",
+                    "next_state": "VFL",
                     "rate": "4*T"
                 },
                 {
@@ -545,7 +545,7 @@
             ],
             "mUn": [
                 {
-                    "next_state": "MLV",
+                    "next_state": "VUnL",
                     "rate": "4*T"
                 },
                 {
@@ -555,7 +555,7 @@
             ],
             "mEnvU": [
                 {
-                    "next_state": "MLV",
+                    "next_state": "VUnL",
                     "rate": "4*T"
                 },
                 {

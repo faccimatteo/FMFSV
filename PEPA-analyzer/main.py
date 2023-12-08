@@ -1,8 +1,10 @@
+import sys 
 from PEPA_parser import parse_model, draw_derivation_graph, compute_activities
+from handle_arguments import parse_model_argument
 
 def main():
-    model = parse_model("/Users/matteo/Documents/Unive/FMFSV/PEPA-analyzer/moadel.pepa")
-    # activities = ["mUn", "mEnvU", "mEnvF", "mF", "mLV", "mEnvL", "mFake"]
+    modelPath = parse_model_argument()
+    model = parse_model(filePath=modelPath)
     activities = compute_activities(model=model)
 
     draw_derivation_graph(model=model, activities=activities)

@@ -7,7 +7,7 @@ import graphviz
 import logging
 from states import model_states
 
-logger = logging.getLogger("model_parser")
+logger = logging.getLogger()
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
 def remove_comments(input_string: str):
@@ -98,7 +98,7 @@ def parse_components(component: str, component_value: str, components: dict) -> 
     return components
 
 
-def compute_outgoing_states(current_state: List[str], activity: str, model: dict):
+def compute_outgoing_states(current_state: List[str], activity: str, model: dict) -> List[str]:
     """ 
     Compute every outgoing states and their relative rates 
     starting from a `current_state` and given an `activity`.
@@ -107,16 +107,22 @@ def compute_outgoing_states(current_state: List[str], activity: str, model: dict
     Args:
         current_state (List[str]): list of current PEPA components of the system at a given time T.
         activity (str): PEPA component's activity for the model.
-        model (dict): _description_
+        model (dict): parsed PEPA model 
+    Returns: 
+        List of outgoing states from a current state given an activity.
     """
     component_next_state = []
     next_state_rates = []
-    is_set_present = False
+    multiple_outgoing_states = False
+    # If activity does not bring our current_state to a next_state, we do want to ignore it
+    is_activity_valid = False
     for component in current_state:
         if activity in model["components"][component]:
+            # We now know for sure that the activity is bringing our state in a next one
+            is_activity_valid = True
             # If activity produces two or more outgoing states 
             if len(model["components"][component][activity]) > 1:
-                is_set_present = True
+                multiple_outgoing_states = True
                 multiple_state_outcomes = set([outgoing_component_state['next_state'] for outgoing_component_state in model["components"][component][activity]])
                 component_next_state.append(multiple_state_outcomes) 
             else: 
@@ -126,12 +132,13 @@ def compute_outgoing_states(current_state: List[str], activity: str, model: dict
             # If no transition exists for this action
             component_next_state.append(component)
             
-    if is_set_present: 
-        # Convert to set if not already a set
+    if multiple_outgoing_states: 
+        # Convert to set and calculate combinations
         sets = [elem if isinstance(elem, set) else {elem} for elem in component_next_state]
-        # Calculate combinations
         component_next_state = list(map(lambda x: list(x), list(product(*sets))))
-        
+    elif not is_activity_valid:
+        component_next_state = []
+    
     return (component_next_state)
 
 def compute_activities(model: dict) -> List[str]:
@@ -157,7 +164,7 @@ def parse_model(filePath: str) -> dict:
     try:
         file = open(file=filePath)
     except Exception:
-        print(f"[MODEL PARSER] - File {filePath} may not exists. Make sure file is present.")
+        logger.error(f"[MODEL PARSER] - File {filePath} may not exists. Make sure file is present.")
         exit(1)
     
     rows = []
@@ -196,7 +203,7 @@ def parse_model(filePath: str) -> dict:
     
     # Writing model to file for debug purposes
     parsed_model = open(file='parsed_model.json', mode='w')
-    parsed_model.write(str(model))
+    parsed_model.write(json.dumps(obj=model,indent=4))
     parsed_model.close()
     logger.debug(f"[MODEL PARSER] - Parsing model operation completed. Complete file can be found in \"{os.getcwd()}parsed_mode.json\"") 
     
@@ -224,19 +231,20 @@ def draw_derivation_graph(model: str, activities: List[str]):
             logger.debug(f"[MODEL PARSER] --> Analyzing transition {activity}")
             outgoing_states = compute_outgoing_states(current_state=current_state, activity=activity, model=model)
             
+            multiple_outgoing_states = isinstance(outgoing_states, List) and len(outgoing_states) > 1 and isinstance(outgoing_states[0], List)
+            single_outgoing_state = isinstance(outgoing_states, List) and len(outgoing_states) == 1
             # Transition for current_state produces multiple outgoing states
-            if len(outgoing_states) > 1 and isinstance(outgoing_states[0], List):
+            if multiple_outgoing_states:
                 # Looping on outgoing state given: current state -> activity
                 for outgoing_state in outgoing_states:
                     outgoing_state_string = "(" + ", ".join(outgoing_state) + ")"
                     graph.node(outgoing_state_string)
                     graph.edge(current_state_graph, outgoing_state_string, activity)
             # Transition produces exactly one state
-            elif isinstance(outgoing_states, List): 
+            elif single_outgoing_state: 
                 graph.node(outgoing_state_string)
                 graph.edge(current_state_graph, outgoing_state_string, activity)
-            else:
-                logger.error(f"[MODEL PARSER] - Unexpected outgoing state from the model: {outgoing_state_string}")
+            
     graph.render('derivation_graph', cleanup=True, format='svg')
 
 
