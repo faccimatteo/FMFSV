@@ -9,12 +9,32 @@
             "value": "2.0"
         },
         {
+            "rate": "rFake",
+            "value": "0.1"
+        },
+        {
             "rate": "nFM",
             "value": "70"
         },
         {
             "rate": "nUM",
             "value": "10"
+        },
+        {
+            "rate": "nLM",
+            "value": "20"
+        },
+        {
+            "rate": "p",
+            "value": "0.4"
+        },
+        {
+            "rate": "w1",
+            "value": "p"
+        },
+        {
+            "rate": "w2",
+            "value": "(1-p)"
         }
     ],
     "components": {
@@ -40,6 +60,50 @@
             "mF": [
                 {
                     "next_state": "MUn",
+                    "rate": "T"
+                }
+            ],
+            "mLV": [
+                {
+                    "next_state": "MUn",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "MUn",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "MUinv",
+                    "rate": "T"
+                }
+            ]
+        },
+        "MUinv": {
+            "aTau": [
+                {
+                    "next_state": "MUinv",
+                    "rate": "rM"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "MUn",
+                    "rate": "T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "MUn",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "MUinv",
                     "rate": "T"
                 }
             ]
@@ -68,6 +132,50 @@
                     "next_state": "EnvUn",
                     "rate": "T"
                 }
+            ],
+            "mLV": [
+                {
+                    "next_state": "EnvUn",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "EnvUn",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "EnvUinv",
+                    "rate": "T"
+                }
+            ]
+        },
+        "EnvUinv": {
+            "aTau": [
+                {
+                    "next_state": "EnvUinv",
+                    "rate": "(nUM-1)*rM"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "EnvUn",
+                    "rate": "T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "EnvUn",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "EnvUinv",
+                    "rate": "T"
+                }
             ]
         },
         "MF": {
@@ -90,6 +198,24 @@
                 }
             ],
             "mEnvU": [
+                {
+                    "next_state": "VUn",
+                    "rate": "T"
+                }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
                 {
                     "next_state": "VUn",
                     "rate": "T"
@@ -120,6 +246,24 @@
                     "next_state": "VUn",
                     "rate": "T"
                 }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VUn",
+                    "rate": "T"
+                }
             ]
         },
         "VUn": {
@@ -136,6 +280,38 @@
                 }
             ],
             "mEnvU": [
+                {
+                    "next_state": "VUn",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VUn",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VLV": {
+            "vLV": [
+                {
+                    "next_state": "MF",
+                    "rate": "rV"
+                }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
                 {
                     "next_state": "VUn",
                     "rate": "T"
@@ -166,6 +342,24 @@
                     "next_state": "VEnvUn",
                     "rate": "T"
                 }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUn",
+                    "rate": "T"
+                }
             ]
         },
         "VEnv1": {
@@ -188,6 +382,24 @@
                 }
             ],
             "mEnvU": [
+                {
+                    "next_state": "VEnvUn",
+                    "rate": "T"
+                }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
                 {
                     "next_state": "VEnvUn",
                     "rate": "T"
@@ -218,6 +430,24 @@
                     "next_state": "VEnvUn",
                     "rate": "T"
                 }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUn",
+                    "rate": "T"
+                }
             ]
         },
         "VEnvUn": {
@@ -236,6 +466,524 @@
             "mEnvU": [
                 {
                     "next_state": "VEnvUn",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUn",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VEnvLV": {
+            "vLV": [
+                {
+                    "next_state": "EnvF",
+                    "rate": "rV"
+                }
+            ],
+            "mLV": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VEnvLV",
+                    "rate": "T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUn",
+                    "rate": "T"
+                }
+            ]
+        },
+        "MLV": {
+            "mLV": [
+                {
+                    "next_state": "VLVL",
+                    "rate": "w1*rM"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "w2*rM"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VLVL",
+                    "rate": "w1*rM"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "w2*rM"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VLVL": {
+            "vEnvLV": [
+                {
+                    "next_state": "MLV",
+                    "rate": "rV"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VFL": {
+            "vF": [
+                {
+                    "next_state": "MLV",
+                    "rate": "rV"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VUnL": {
+            "vUn": [
+                {
+                    "next_state": "MLV",
+                    "rate": "rV"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "EnvLV": {
+            "mEnvL": [
+                {
+                    "next_state": "VEnv2L",
+                    "rate": "(nLM-1)*(w1*rM)"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "(nLM-1)*(w2*rM)"
+                },
+                {
+                    "next_state": "VEnv1L",
+                    "rate": "w1*rM"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "w2*rM"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VEnvFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "MLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VEnvFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VEnvUnL": {
+            "vUn": [
+                {
+                    "next_state": "EnvLV",
+                    "rate": "rV"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VEnvFL": {
+            "vF": [
+                {
+                    "next_state": "EnvLV",
+                    "rate": "rV"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VEnv1L": {
+            "vLV": [
+                {
+                    "next_state": "EnvLV",
+                    "rate": "rV"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VEnv1L",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VEnvFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "VEnv2L": {
+            "vEnvLV": [
+                {
+                    "next_state": "EnvLV",
+                    "rate": "rV"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "VEnv2L",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "VEnvFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "VEnvFL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "4*T"
+                },
+                {
+                    "next_state": "EnvLV",
+                    "rate": "6*T"
+                }
+            ],
+            "mFake": [
+                {
+                    "next_state": "VEnvUnL",
+                    "rate": "T"
+                }
+            ]
+        },
+        "C": {
+            "mFake": [
+                {
+                    "next_state": "C",
+                    "rate": "rFake"
+                }
+            ],
+            "mUn": [
+                {
+                    "next_state": "C",
+                    "rate": "T"
+                }
+            ],
+            "mF": [
+                {
+                    "next_state": "C",
+                    "rate": "T"
+                }
+            ],
+            "mEnvU": [
+                {
+                    "next_state": "C",
+                    "rate": "T"
+                }
+            ],
+            "mEnvF": [
+                {
+                    "next_state": "C",
+                    "rate": "T"
+                }
+            ],
+            "mLV": [
+                {
+                    "next_state": "C",
+                    "rate": "T"
+                }
+            ],
+            "mEnvL": [
+                {
+                    "next_state": "C",
                     "rate": "T"
                 }
             ]

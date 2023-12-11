@@ -176,25 +176,29 @@ def compute_outgoing_states(current_state: List[str], activity: str, model: dict
     # If activity does not bring our current_state to a next_state, we do want to ignore it
     is_activity_valid = False
     for component in current_state:
-        if activity in model["components"][component]:
-            is_activity_valid = True
-            # If activity produces two or more outgoing states 
-            if len(model["components"][component][activity]) > 1:
-                multiple_outgoing_states = True
-                multiple_state_outcomes = set([outgoing_component_state['next_state'] for outgoing_component_state in model["components"][component][activity]])
-                component_next_state.append(multiple_state_outcomes) 
-                outgoing_rates = compute_outgoing_rates(model=model, component=component, activity=activity, multiple=True)
-            else: 
-                # Transition with exactly one outgoing state
-                component_next_state.append(model["components"][component][activity][0]["next_state"])
-                outgoing_rates = compute_outgoing_rates(model=model, component=component, activity=activity, multiple=False)
+        try:
+            if activity in model["components"][component]:
+                is_activity_valid = True
+                # If activity produces two or more outgoing states 
+                if len(model["components"][component][activity]) > 1:
+                    multiple_outgoing_states = True
+                    multiple_state_outcomes = set([outgoing_component_state['next_state'] for outgoing_component_state in model["components"][component][activity]])
+                    component_next_state.append(multiple_state_outcomes) 
+                    outgoing_rates = compute_outgoing_rates(model=model, component=component, activity=activity, multiple=True)
+                else: 
+                    # Transition with exactly one outgoing state
+                    component_next_state.append(model["components"][component][activity][0]["next_state"])
+                    outgoing_rates = compute_outgoing_rates(model=model, component=component, activity=activity, multiple=False)
+                
+                # Add rates for single or multiple 
+                next_state_rates = next_state_rates + outgoing_rates
             
-            # Add rates for single or multiple 
-            next_state_rates = next_state_rates + outgoing_rates
-        
-        else:
-            # If no transition exists for this action
-            component_next_state.append(component)
+            else:
+                # If no transition exists for this action
+                component_next_state.append(component)
+        except KeyError as e:
+            logger.error(f"[MODEL PARSER] - Make sure that all states in `states.py` belong to the parsed PEPA model.")
+            exit(1)
             
     if multiple_outgoing_states: 
         # Convert to set and calculate combinations
@@ -444,16 +448,14 @@ def draw_derivation_graph(model: str, activities: List[str]):
         
     """
     
-    graph = graphviz.Digraph('Derivation graph', format='png')
+    graph = graphviz.Digraph('Derivation graph', format='svg')
     graph.attr(rankdir='TB') 
-    graph.attr(nodesep='1.4')
-    graph.attr(ranksep='1.5')
+    graph.attr(nodesep='0.5')
+    graph.attr(ranksep='0.3')
     
     # Looping over model different model states
     for current_state in model_states:
         
-        # Remove state number information
-        current_state = current_state[1:]
         # Turning current PEPA state in a representable format
         current_state_graph = "(" + ", ".join(current_state) + ")"
         # Creating node for starting state
@@ -485,7 +487,7 @@ def draw_derivation_graph(model: str, activities: List[str]):
                     # graph.node(outgoing_state_string)
                     graph.edge(current_state_graph, outgoing_state_string, f"({activity}, {outgoing_rates[0]})")
     logger.info(f"[MODEL PARSER] - Drawning derivation graph in \"{os.getcwd()}/derivation_graph.svg\"... ")           
-    graph.render('derivation_graph', cleanup=True, format='png')
+    graph.render('derivation_graph', cleanup=True, format='svg')
     logger.info(f"[MODEL PARSER] - Derivation graph correctly rendered.")           
 
 

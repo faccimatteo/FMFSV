@@ -7,8 +7,8 @@ def main():
     model = parse_model(filePath=modelPath)
     activities = compute_activities(model=model)
 
-    # draw_derivation_graph(model=model, activities=activities)
-    draw_CTMC_graph(model=model, activities=activities)
+    draw_derivation_graph(model=model, activities=activities)
+    # draw_CTMC_graph(model=model, activities=activities)
 
 if __name__ == "__main__":
     main()

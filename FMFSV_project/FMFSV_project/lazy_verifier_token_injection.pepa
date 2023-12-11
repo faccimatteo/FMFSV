@@ -105,7 +105,7 @@ VUnL	=	(vUn, rV).MLV +
 /* Environment */
 
 EnvLV	=	(mEnvL, (nLM - 1) * (w1 * rM)).VEnv2L + (mEnvL, (nLM - 1) * (w2 * rM)).EnvLV +
-			(mLV, w1 * rM).VEnv1L + (mEnvL, w2 * rM).EnvLV +
+			(mEnvL, w1 * rM).VEnv1L + (mEnvL, w2 * rM).EnvLV +
 			(mF, 4 * T).VEnvFL + (mF, 6 * T).MLV+
 			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
 			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
