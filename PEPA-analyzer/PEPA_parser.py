@@ -5,6 +5,9 @@ from typing import List
 from itertools import product
 import graphviz
 import logging
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.linalg import expm
 from states import model_states, ctmc_states
 
 logger = logging.getLogger()
@@ -301,10 +304,10 @@ def convert_ctmc_to_graph(ctmc: dict):
     - The function uses the Graphviz library to create and render the graph.
     """
     
-    graph = graphviz.Digraph('CTMC graph', format='png')
+    graph = graphviz.Digraph('CTMC graph', format='svg')
     graph.attr(rankdir='TB') 
-    graph.attr(nodesep='1.4')
-    graph.attr(ranksep='1.5')
+    graph.attr(nodesep='0.5')
+    graph.attr(ranksep='0.5')
     
     for component, outgoing_state in ctmc.items():
         graph.node(component)
@@ -314,7 +317,7 @@ def convert_ctmc_to_graph(ctmc: dict):
                 graph.edge(component, state, rate)
     
     logger.info(f"[MODEL PARSER] - Drawning CTMC graph in \"{os.getcwd()}/ctmc_graph.svg\"... ")           
-    graph.render('ctmc_graph', cleanup=True, format='png')
+    graph.render('ctmc_graph', cleanup=True, format='svg')
     logger.info(f"[MODEL PARSER] - CTMC graph correctly rendered.") 
     
 def compact_ctmc_rates(ctmc: dict) -> dict:
@@ -331,7 +334,10 @@ def compact_ctmc_rates(ctmc: dict) -> dict:
     for component, outgoing_state in ctmc.items():
         for state, rate in outgoing_state.items():
             # We take only the first element as there can be multiple rate with the same value
-            ctmc[component][state] = min(rate, key=len)
+            if len(rate) == 2 and rate[0] != rate[1] and ('rM' in rate[0] and 'rM' in rate[1] or 'rV' in rate[0] and 'rV' in rate[1]):
+                ctmc[component][state] = str(max(rate, key=len)).split('*')[0][1:4]
+            else:
+                ctmc[component][state] = min(rate, key=len)
     
     return ctmc
 
@@ -414,12 +420,15 @@ def draw_CTMC_graph(model: dict, activities: List[str]):
                     if multiple_outgoing_states:
                         # Looping on outgoing state given: current state -> activity
                         for outgoing_state in enumerate(outgoing_states):
+                            # TODO: da modificare
+                            if len(outgoing_state) == 2:
+                                outgoing_state = outgoing_state[1]
                             outgoing_state_string = "(" + ", ".join(outgoing_state) + ")"
                             outgoing_state_number = ctmc_states[outgoing_state_string]
                             if current_state_number != outgoing_state_number:
                                 if outgoing_state_number not in ctmc[current_state_number]:
                                     ctmc[current_state_number][outgoing_state_number] = []
-                                ctmc[current_state_number][outgoing_state_number] = list(ctmc[current_state_number][outgoing_state_number]).append(outgoing_rates)
+                                ctmc[current_state_number][outgoing_state_number].append(outgoing_rates[0])
                                                                 
                     # Transition produces exactly one state
                     elif single_outgoing_state: 
@@ -451,7 +460,7 @@ def draw_derivation_graph(model: str, activities: List[str]):
     graph = graphviz.Digraph('Derivation graph', format='svg')
     graph.attr(rankdir='TB') 
     graph.attr(nodesep='0.5')
-    graph.attr(ranksep='0.3')
+    graph.attr(ranksep='0.5')
     
     # Looping over model different model states
     for current_state in model_states:

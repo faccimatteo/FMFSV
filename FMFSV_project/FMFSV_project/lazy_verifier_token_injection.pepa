@@ -1,13 +1,13 @@
 /*Rates definitions*/
-rM		= 0.5; 			/* Mining rate 						 		*/
-rV 		= 2.0; 			/* Verification rate				 		*/
-rFake 	= 0.1; 			/* Block injection rate     		 		*/
-nFM 	= 70;  			/* Fair miners 						 		*/
-nUM 	= 10;			/* Unfair miners 					 		*/
-nLM 	= 20; 			/* Lazy verifier miners 			 		*/
-p 		= 0.4; 			/* Lazy verifier verify probability  		*/
-w1 		= p;			/* Probability of verifing the block 		*/
-w2 		= (1 - p);		/* Probability of not verifying the block 	*/
+rM		= 0.000000313; 		/* Mining rate 						 		*/
+rV 		= 0.0314; 			/* Verification rate				 		*/
+rFake 	= 0.00178318; 		/* Block injection rate     		 		*/
+nFM 	= 185401;  			/* Fair miners 						 		*/
+nUM 	= 39729;			/* Unfair miners 					 		*/
+nLM 	= 39729; 			/* Lazy verifier miners 			 		*/
+p 		= 0.4; 				/* Lazy verifier verify probability  		*/
+w1 		= p;				/* Probability of verifing the block 		*/
+w2 		= (1 - p);			/* Probability of not verifying the block 	*/
 
 
 /* Unfair miner definition */
