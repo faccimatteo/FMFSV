@@ -1,0 +1,151 @@
+/*Rates definitions*/
+rM		= 0.5; 			/* Mining rate 						 		*/
+rV 		= 2.0; 			/* Verification rate				 		*/
+rFake 	= 0.1; 			/* Block injection rate     		 		*/
+nFM 	= 70;  			/* Fair miners 						 		*/
+nUM 	= 10;			/* Unfair miners 					 		*/
+nLM 	= 20; 			/* Lazy verifier miners 			 		*/
+p 		= 0.4; 			/* Lazy verifier verify probability  		*/
+w1 		= p;			/* Probability of verifing the block 		*/
+w2 		= (1 - p);		/* Probability of not verifying the block 	*/
+
+
+/* Unfair miner definition */
+MUn   	=	(mUn, rM).MUn + (mEnvU, T).MUn + 
+			(mEnvF, T).MUn + (mF, T).MUn +
+			(mLV, T).MUn + (mEnvL, T).MUn +
+			(mFake, T).MUinv;
+
+MUinv	= 	(aTau, rM).MUinv + (mF, T).MUn + (mEnvF, T).MUn + (mFake, T).MUinv;
+
+EnvUn 	= 	(mEnvU, (nUM - 1) * rM).EnvUn + (mUn, T).EnvUn + 
+			(mF, T).EnvUn + (mEnvF, T).EnvUn +
+			(mLV, T).EnvUn + (mEnvL, T).EnvUn +
+			(mFake, T).EnvUinv;
+		
+EnvUinv	= 	(aTau, (nUM - 1) * rM).EnvUinv + (mF, T).EnvUn + (mEnvF, T).EnvUn + (mFake, T).EnvUinv;
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
+
+/* Fair miner definition */
+MF 		= 	(mF, rM).VF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn + 
+			(mLV, T).VLV + (mEnvL, T).VLV +
+			(mFake, T).VUn;
+								
+VF 		= 	(vEnvF, rV).MF + (mEnvF, T).VF + 
+			(mUn, T).VUn + (mEnvU, T).VUn +
+			(mLV, T).VLV + (mEnvL, T).VLV +
+			(mFake, T).VUn;
+								
+VUn 	= 	(vUn, rV).MF + 
+			(mUn, T).VUn + (mEnvU, T).VUn +
+			(mFake, T).VUn;
+
+VLV 	= 	(vLV, rV).MF + 
+			(mLV, T).VLV + (mEnvL, T).VLV +
+			(mFake, T).VUn;
+
+
+EnvF 	= 	(mEnvF, (nFM - 1) * rM).VEnv2 + (mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn +
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV +
+			(mFake, T).VEnvUn;
+								
+VEnv1	= 	(vF,rV).EnvF + 
+			(mF, T).VEnv1 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn +	
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV +
+			(mFake, T).VEnvUn;
+								
+VEnv2	= 	(vEnvF, rV).EnvF + 
+			(mEnvF, rM).VEnv2 + 
+			(mUn, T).VEnvUn + (mEnvU, T).VEnvUn +
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV +
+			(mFake, T).VEnvUn;
+								
+VEnvUn	= 	(vUn, rV).EnvF + 
+			(mUn, T).VEnvUn+ (mEnvU, T).VEnvUn +
+			(mFake, T).VEnvUn;
+								
+VEnvLV	= 	(vLV, rV).EnvF + 
+			(mLV, T).VEnvLV + (mEnvL, T).VEnvLV +
+			(mFake, T).VEnvUn;
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------------------------------- */								
+
+/* Lazy verifier miner definition */
+/* Single */
+MLV		= 	(mLV, w1 * rM).VLVL + (mLV, w2 * rM).MLV +
+			(mEnvL, w1 * rM).VLVL + (mEnvL, w2 * rM).MLV +
+			(mF, 4 * T).VFL + (mF, 6 * T).MLV +
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).MLV +
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV +
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).MLV + 
+			(mFake, T).VUnL;
+
+VLVL	= 	(vEnvLV, rV).MLV +
+		 /* (mEnvL, T).VLVL + (mEnvL, T).MLV+*/
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV +
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).MLV +
+			(mF, 4 * T).VFL + (mF, 6 * T).MLV +
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).MLV + 
+			(mFake, T).VUnL;
+								
+VFL		=	(vF, rV).MLV + 
+			(mF, 4 * T).VFL + (mF, 6 * T).MLV + 
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).MLV + 
+			(mFake, T).VUnL;
+								
+VUnL	=	(vUn, rV).MLV + 
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).MLV + 
+			(mEnvU, T).VUnL + (mEnvU, 6 * T).MLV + 
+			(mFake, T).VUnL;
+
+/* Environment */
+
+EnvLV	=	(mEnvL, (nLM - 1) * (w1 * rM)).VEnv2L + (mEnvL, (nLM - 1) * (w2 * rM)).EnvLV +
+			(mEnvL, w1 * rM).VEnv1L + (mEnvL, w2 * rM).EnvLV +
+			(mF, 4 * T).VEnvFL + (mF, 6 * T).MLV+
+			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
+			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VEnvUnL + (mEnvU, 6 * T).EnvLV +
+			(mFake, T).VEnvUnL;
+								
+VEnvUnL	= 	(vUn, rV).EnvLV + 
+			(mUn, 4 * T).VUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VUnL + (mEnvU, 6 * T).EnvLV +
+			(mFake, T).VEnvUnL;
+
+VEnvFL	=	(vF, rV).EnvLV + 
+			(mF, 4 * T).VFL + (mF, 6 * T).EnvLV + 
+			(mEnvF, 4 * T).VFL + (mEnvF, 6 * T).EnvLV +
+			(mFake, T).VEnvUnL;
+								
+VEnv1L	=	(vLV, rV).EnvLV + 
+			(mF, 4 * T).VEnv1L + (mF, 6 * T).EnvLV +
+			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
+			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VEnvUnL + (mEnvU, 6 * T).EnvLV +
+			(mFake, T).VEnvUnL;
+								
+VEnv2L	=	(vEnvLV, rV).EnvLV +
+			(mEnvL, 4 * T).VEnv2L + (mEnvL, 6 * T).EnvLV +
+			(mF, 4 * T).VEnvFL + (mF, 6 * T).EnvLV +
+			(mEnvF, 4 * T).VEnvFL + (mEnvF, 6 * T).EnvLV +
+			(mUn, 4 * T).VEnvUnL + (mUn, 6 * T).EnvLV +
+			(mEnvU, 4 * T).VEnvUnL + (mEnvU, 6 * T).EnvLV +
+			(mFake, T).VEnvUnL;
+			
+/* Invalid blocks creator */
+
+C 		= 	(mFake, rFake).C + (mUn, T).C + (mF, T).C + (mEnvU, T).C + (mEnvF, T).C + (mLV, T).C + (mEnvL, T).C;
+
+/* System equation */
+((MUn <mF, mEnvF, mUn, mEnvU, mLV, mEnvL, mFake> EnvUn)
+<mF, mEnvF, mUn, mEnvU, mLV, mEnvL, mFake> 
+(MF <mF, mEnvF, vEnvF, mUn, mEnvU, vUn, mLV, mEnvL, vLV, mFake> EnvF) 
+<mF, mEnvF, mUn, mEnvU, mLV, mEnvL, mFake>
+(MLV<mLV, mEnvL, vEnvLV, mF, mEnvF, vF, mUn, mEnvU, vUn, mFake> EnvLV)) 
+<mF, mEnvF, mUn, mEnvU, mLV, mEnvL, mFake>
+C

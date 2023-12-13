@@ -1,0 +1,18 @@
+{
+    // Usare IntelliSense per informazioni sui possibili attributi.
+    // Al passaggio del mouse vengono visualizzate le descrizioni degli attributi esistenti.
+    // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: PEPA model parser",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/PEPA-analyzer",
+            "program": "${workspaceFolder}/PEPA-analyzer/main.py",
+            "args": ["--model", "./model.pepa"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
